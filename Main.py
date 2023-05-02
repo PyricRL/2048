@@ -35,6 +35,7 @@ class Block(pygame.sprite.Sprite):
         self.block = pygame.draw.rect(win, self.color, self.rect)
 
         # Textures for the sprite, someone needs to draw the actual blocks :\
+        #I did - Logan
         self.image = pygame.Surface((width, height))
         self.image.fill(color)
 
