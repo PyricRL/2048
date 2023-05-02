@@ -1,9 +1,13 @@
 import pygame, sys
-from Config import *
+import Config
+pygame.init()
 
-win = pygame.display.set_mode(winwidth, winheight)
+win = pygame.display.set_mode((Config.winwidth, Config.winheight))
 
-for event in pygame.event.get():
-    if event.type == pygame.QUIT:
-        pygame.quit()
-        sys.exit()
+while True:
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            pygame.quit()
+            sys.exit()
+
+        pygame.display.update()
