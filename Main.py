@@ -10,4 +10,8 @@ while True:
             pygame.quit()
             sys.exit()
 
+        #this is a test if i can see it in github
+
         pygame.display.update()
+
+        #this is another test
