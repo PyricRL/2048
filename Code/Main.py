@@ -15,9 +15,9 @@ def createGrid() -> pygame.sprite.Group:
                     0,
                     Config.blockwidth,
                     Config.blockheight,
-                    x * (Config.blockwidth + Config.boarderwidth) + Config.boarderwidth,
-                    y * (Config.blockheight + Config.boarderwidth)
-                    + Config.boarderwidth,
+                    x * (Config.blockwidth + Config.borderwidth) + Config.borderwidth,
+                    y * (Config.blockheight + Config.borderwidth)
+                    + Config.borderwidth,
                     0,
                 )
                 for x in range(Config.gridwidth)
@@ -57,7 +57,7 @@ class Block(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(im,(self.width,self.height))
 
 blocks = createGrid()
-win.fill(Config.boardercolor)
+win.fill(Config.bordercolor)
 blocks.sprites()[5].change(images["128"])
 while True:
     for event in pygame.event.get():
