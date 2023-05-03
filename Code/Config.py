@@ -1,5 +1,6 @@
 winwidth = 700
 winheight = 700
+'''learn how to spell border.'''
 boarderwidth = 4
 boardercolor = (255,255,255)
 gridwidth = 5
