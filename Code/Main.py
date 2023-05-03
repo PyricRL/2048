@@ -4,7 +4,7 @@ import Config
 pygame.init()
 
 win = pygame.display.set_mode((Config.winwidth, Config.winheight))
-
+win.fill(Config.bordercolor)
 
 def createGrid() -> pygame.sprite.Group:
     """simply creates the Blocks to go on the grid and returns a group in a one-liner B)"""
@@ -46,19 +46,28 @@ class Block(pygame.sprite.Sprite):
         self.width = width
         self.height = height
         self.score = score
-        self.images = images
         self.rect = pygame.rect.Rect(x, y, width, height)
         pygame.draw.rect(win, (255, 0, 0),self.rect)
-        self.image = pygame.transform.scale(self.images["2"],(width,height))
-
+        if number == 0:
+            number = 0
+            self.image = pygame.transform.scale(images["2"],(width,height))
+            self.image.fill(Config.background)
+        else:
+            self.image = pygame.transform.scale(images[str(number)],(width,height))
+            
     def draw(self):
         win.blit(self.image, self.rect)
-    def change(self,im):
-        self.image = pygame.transform.scale(im,(self.width,self.height))
-
+    def change(self,num):
+        self.number = num
+        if num == 0:
+            im = images["2"].copy()
+            im.fill(Config.background)
+            self.image = pygame.transform.scale(im,(self.width,self.height))
+        else:
+            im = images[str(num)].copy()
+            self.image = pygame.transform.scale(im,(self.width,self.height))
 blocks = createGrid()
-win.fill(Config.bordercolor)
-blocks.sprites()[5].change(images["128"])
+
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
