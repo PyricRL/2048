@@ -1,6 +1,6 @@
 import pygame, sys
 import Config
-#Lincoln Test
+
 pygame.init()
 
 win = pygame.display.set_mode((Config.winwidth, Config.winheight))
