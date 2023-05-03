@@ -26,14 +26,18 @@ def createGrid() -> pygame.sprite.Group:
         ]
     )
 
+
 # Dictionary of images for our block class
-images={'2' : pygame.image.load(".\\assets\\2BlueBlock.png"),
-'4' : pygame.image.load(".\\assets\\4RedBlock.png"),
-'8' : pygame.image.load(".\\assets\\8LightGreenBlock.png"),
-'16' : pygame.image.load(".\\assets\\16PurpleBlock.png"),
-'32' : pygame.image.load(".\\assets\\32YellowBlock.png"),
-'64' : pygame.image.load(".\\assets\\64LightBlueBlock.png"),
-'128' : pygame.image.load(".\\assets\\128OrangeBlock.png")}
+images = {
+    "2": pygame.image.load(".\\assets\\2BlueBlock.png"),
+    "4": pygame.image.load(".\\assets\\4RedBlock.png"),
+    "8": pygame.image.load(".\\assets\\8LightGreenBlock.png"),
+    "16": pygame.image.load(".\\assets\\16PurpleBlock.png"),
+    "32": pygame.image.load(".\\assets\\32YellowBlock.png"),
+    "64": pygame.image.load(".\\assets\\64LightBlueBlock.png"),
+    "128": pygame.image.load(".\\assets\\128OrangeBlock.png"),
+}
+
 
 class Block(pygame.sprite.Sprite):
     def __init__(self, number, width, height, x, y, score):
@@ -44,20 +48,17 @@ class Block(pygame.sprite.Sprite):
         self.score = score
         self.images = images
         self.rect = pygame.rect.Rect(x, y, width, height)
-        self.image = self.images["2"]
+        pygame.draw.rect(win, (255, 0, 0),self.rect)
+        self.image = pygame.transform.scale(self.images["2"],(width,height))
 
-    def Draw(self):
-        resized = pygame.transform.scale(self.image, (self.width,self.height))
-        win.blit(resized, self.rect)
+    def draw(self):
+        win.blit(self.image, self.rect)
+    def change(self,im):
+        self.image = pygame.transform.scale(im,(self.width,self.height))
 
 blocks = createGrid()
 win.fill(Config.boardercolor)
-blocks.sprites()[10].image=images["4"]
-blocks.sprites()[8].image=images["8"]
-blocks.sprites()[19].image=images["16"]
-blocks.sprites()[4].image=images["32"]
-blocks.sprites()[14].image=images["64"]
-blocks.sprites()[2].image=images["128"]
+blocks.sprites()[5].change(images["128"])
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:

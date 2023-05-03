@@ -1,9 +1,9 @@
-winwidth = 700
-winheight = 700
-boarderwidth = 4
+winwidth = 300
+winheight = 300
+boarderwidth = 2
 boardercolor = (255,255,255)
 gridwidth = 5
-gridheight = 4
+gridheight = 5
 blockwidth = (winwidth-boarderwidth*(gridwidth+1))//gridwidth
               #700  -  4  *  5  /  5
 blockheight = (winheight-boarderwidth*(gridheight+1))//gridheight
