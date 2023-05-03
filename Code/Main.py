@@ -13,7 +13,6 @@ def createGrid() -> pygame.sprite.Group:
             [
                 Block(
                     0,
-                    (255, 0, 0),
                     Config.blockwidth,
                     Config.blockheight,
                     x * (Config.blockwidth + Config.boarderwidth) + Config.boarderwidth,
@@ -27,31 +26,38 @@ def createGrid() -> pygame.sprite.Group:
         ]
     )
 
+# Dictionary of images for our block class
+images={'2' : pygame.image.load(".\\assets\\2BlueBlock.png"),
+'4' : pygame.image.load(".\\assets\\4RedBlock.png"),
+'8' : pygame.image.load(".\\assets\\8LightGreenBlock.png"),
+'16' : pygame.image.load(".\\assets\\16PurpleBlock.png"),
+'32' : pygame.image.load(".\\assets\\32YellowBlock.png"),
+'64' : pygame.image.load(".\\assets\\64LightBlueBlock.png"),
+'128' : pygame.image.load(".\\assets\\128OrangeBlock.png")}
 
 class Block(pygame.sprite.Sprite):
-    def __init__(self, number, color, width, height, x, y, score):
+    def __init__(self, number, width, height, x, y, score):
         super().__init__()
         self.number = number
-        self.color = color
         self.width = width
         self.height = height
         self.score = score
-
+        self.images = images
         self.rect = pygame.rect.Rect(x, y, width, height)
-        self.block = pygame.draw.rect(win, self.color, self.rect)
-
-        # Textures for the sprite, someone needs to draw the actual blocks :\
-        self.image = pygame.Surface((width, height))
-        self.image.fill(color)
+        self.image = self.images["2"]
 
     def Draw(self):
-        win.blit(self.image, self.rect)
-
+        resized = pygame.transform.scale(self.image, (self.width,self.height))
+        win.blit(resized, self.rect)
 
 blocks = createGrid()
-blocks.sprites()[0].image.fill( # example of changing the color of one of the blocks to blue
-    (0, 0, 255)
-) 
+win.fill(Config.boardercolor)
+blocks.sprites()[10].image=images["4"]
+blocks.sprites()[8].image=images["8"]
+blocks.sprites()[19].image=images["16"]
+blocks.sprites()[4].image=images["32"]
+blocks.sprites()[14].image=images["64"]
+blocks.sprites()[2].image=images["128"]
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
