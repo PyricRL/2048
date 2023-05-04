@@ -25,6 +25,7 @@ class Block(pygame.sprite.Sprite):
         self.height = height
         self.score = score
         self.rect = pygame.rect.Rect(x, y, width, height)
+        self.can_move = True
         pygame.draw.rect(win, (255, 0, 0), self.rect)
         if number == 0:
             number = 0
@@ -35,6 +36,7 @@ class Block(pygame.sprite.Sprite):
 
     def draw(self):
         win.blit(self.image, self.rect)
+        self.movement()
 
     def change(self, num):
         self.number = num
@@ -45,7 +47,7 @@ class Block(pygame.sprite.Sprite):
         else:
             im = images[str(num)].copy()
             self.image = pygame.transform.scale(im, (self.width, self.height))
-    def check_collision(self): #test
+    def check_collision(self):
         if self.rect.left <= 0:
             self.rect.left = 0
         if self.rect.right >= Config.winwidth:
@@ -54,9 +56,18 @@ class Block(pygame.sprite.Sprite):
             self.rect.bottom = Config.winheight
         if self.rect.top <= 0:
             self.rect.top = 0
-    #does this fricking work
-
-
+    def movement(self):
+        keys = pygame.key.get_pressed()  
+        self.check_collision()      
+        if keys[pygame.K_w] and self.can_move == True:
+            self.rect.y += 150
+        if keys[pygame.K_d] and self.can_move == True:
+            self.rect.y -= 150
+        if keys[pygame.K_a] and self.can_move == True:
+            self.rect.x -= 150
+        if keys[pygame.K_d] and self.can_move == True:
+            self.rect.x += 150
+        
 def createGrid() -> pygame.sprite.Group:
     """simply creates the Blocks to go on the grid and returns a group in a one-liner B)"""
     return pygame.sprite.Group(
