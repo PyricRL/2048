@@ -54,7 +54,8 @@ class Block(pygame.sprite.Sprite):
             self.rect.bottom = Config.winheight
         if self.rect.top <= 0:
             self.rect.top = 0
-    
+    #does this fricking work
+
 
 def createGrid() -> pygame.sprite.Group:
     """simply creates the Blocks to go on the grid and returns a group in a one-liner B)"""
