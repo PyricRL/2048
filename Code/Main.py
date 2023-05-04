@@ -4,6 +4,57 @@ import Config
 pygame.init()
 
 win = pygame.display.set_mode((Config.winwidth, Config.winheight))
+win.fill(Config.bordercolor)
+
+images = {
+    "2": pygame.image.load(".\\assets\\2BlueBlock.png"),
+    "4": pygame.image.load(".\\assets\\4RedBlock.png"),
+    "8": pygame.image.load(".\\assets\\8LightGreenBlock.png"),
+    "16": pygame.image.load(".\\assets\\16PurpleBlock.png"),
+    "32": pygame.image.load(".\\assets\\32YellowBlock.png"),
+    "64": pygame.image.load(".\\assets\\64LightBlueBlock.png"),
+    "128": pygame.image.load(".\\assets\\128OrangeBlock.png"),
+}
+
+
+class Block(pygame.sprite.Sprite):
+    def __init__(self, number, width, height, x, y, score):
+        super().__init__()
+        self.number = number
+        self.width = width
+        self.height = height
+        self.score = score
+        self.rect = pygame.rect.Rect(x, y, width, height)
+        pygame.draw.rect(win, (255, 0, 0), self.rect)
+        if number == 0:
+            number = 0
+            self.image = pygame.transform.scale(images["2"], (width, height))
+            self.image.fill(Config.background)
+        else:
+            self.image = pygame.transform.scale(images[str(number)], (width, height))
+
+    def draw(self):
+        win.blit(self.image, self.rect)
+
+    def change(self, num):
+        self.number = num
+        if num == 0:
+            im = images["2"].copy()
+            im.fill(Config.background)
+            self.image = pygame.transform.scale(im, (self.width, self.height))
+        else:
+            im = images[str(num)].copy()
+            self.image = pygame.transform.scale(im, (self.width, self.height))
+    def check_collision(self):
+        if self.rect.left <= 0:
+            self.rect.left = 0
+        if self.rect.right >= Config.winwidth:
+            self.rect.right = Config.winwidth
+        if self.rect.bottom <= Config.winheight:
+            self.rect.bottom = Config.winheight
+        if self.rect.top <= 0:
+            self.rect.top = 0
+    #does this fricking work
 
 
 def createGrid() -> pygame.sprite.Group:
@@ -15,9 +66,8 @@ def createGrid() -> pygame.sprite.Group:
                     0,
                     Config.blockwidth,
                     Config.blockheight,
-                    x * (Config.blockwidth + Config.boarderwidth) + Config.boarderwidth,
-                    y * (Config.blockheight + Config.boarderwidth)
-                    + Config.boarderwidth,
+                    x * (Config.blockwidth + Config.borderwidth) + Config.borderwidth,
+                    y * (Config.blockheight + Config.borderwidth) + Config.borderwidth,
                     0,
                 )
                 for x in range(Config.gridwidth)
@@ -26,42 +76,31 @@ def createGrid() -> pygame.sprite.Group:
         ]
     )
 
+
+def getBlock(x, y) -> Block:
+    """Gets the Block at the coordinates X,Y"""
+    b = blocks.sprites()
+    return b[y * Config.gridwidth + x]
+
+
 # Dictionary of images for our block class
-images={'2' : pygame.image.load(".\\assets\\2BlueBlock.png"),
-'4' : pygame.image.load(".\\assets\\4RedBlock.png"),
-'8' : pygame.image.load(".\\assets\\8LightGreenBlock.png"),
-'16' : pygame.image.load(".\\assets\\16PurpleBlock.png"),
-'32' : pygame.image.load(".\\assets\\32YellowBlock.png"),
-'64' : pygame.image.load(".\\assets\\64LightBlueBlock.png"),
-'128' : pygame.image.load(".\\assets\\128OrangeBlock.png")}
 
-class Block(pygame.sprite.Sprite):
-    def __init__(self, number, width, height, x, y, score):
-        super().__init__()
-        self.number = number
-        self.width = width
-        self.height = height
-        self.score = score
-        self.images = images
-        self.rect = pygame.rect.Rect(x, y, width, height)
-        self.image = self.images["2"]
-
-    def Draw(self):
-        resized = pygame.transform.scale(self.image, (self.width,self.height))
-        win.blit(resized, self.rect)
 
 blocks = createGrid()
-win.fill(Config.boardercolor)
-blocks.sprites()[10].image=images["4"]
-blocks.sprites()[8].image=images["8"]
-blocks.sprites()[19].image=images["16"]
-blocks.sprites()[4].image=images["32"]
-blocks.sprites()[14].image=images["64"]
-blocks.sprites()[2].image=images["128"]
+# getBlock(0,0).change(2)
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_LEFT:
+                pass
+            elif event.key == pygame.K_RIGHT:
+                pass
+            elif event.key == pygame.K_UP:
+                pass
+            elif event.key == pygame.K_DOWN:
+                pass
         blocks.draw(win)  # draws the sprite group of blocks to the window
         pygame.display.update()
