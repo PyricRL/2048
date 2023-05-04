@@ -45,7 +45,7 @@ class Block(pygame.sprite.Sprite):
         else:
             im = images[str(num)].copy()
             self.image = pygame.transform.scale(im, (self.width, self.height))
-    def check_collision(self):
+    def check_collision(self): #test
         if self.rect.left <= 0:
             self.rect.left = 0
         if self.rect.right >= Config.winwidth:
