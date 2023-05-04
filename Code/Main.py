@@ -45,7 +45,16 @@ class Block(pygame.sprite.Sprite):
         else:
             im = images[str(num)].copy()
             self.image = pygame.transform.scale(im, (self.width, self.height))
-
+    def check_collision(self):
+        if self.rect.left <= 0:
+            self.rect.left = 0
+        if self.rect.right >= Config.winwidth:
+            self.rect.right = Config.winwidth
+        if self.rect.bottom <= Config.winheight:
+            self.rect.bottom = Config.winheight
+        if self.rect.top <= 0:
+            self.rect.top = 0
+    
 
 def createGrid() -> pygame.sprite.Group:
     """simply creates the Blocks to go on the grid and returns a group in a one-liner B)"""
