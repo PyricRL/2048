@@ -1,5 +1,5 @@
-winwidth = 700
-winheight = 700
+winwidth = 600
+winheight = 600
 borderwidth = 4
 bordercolor = (255, 255, 255)
 background = (240,240,240)
