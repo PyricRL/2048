@@ -23,13 +23,12 @@ class Block(pygame.sprite.Sprite):
         super().__init__()
         self.x = (x - Config.borderwidth) // (Config.blockwidth + Config.borderwidth)
         self.y = (y - Config.borderwidth) // (Config.blockheight + Config.borderwidth)
-        print(self.x, self.y)
         self.number = number
         self.width = width
         self.height = height
         self.score = score
         self.rect = pygame.rect.Rect(x, y, width, height)
-        pygame.draw.rect(win, (255, 0, 0), self.rect)
+
         if number == 0:
             number = 0
             self.image = pygame.transform.scale(images["2"], (width, height))
@@ -38,6 +37,7 @@ class Block(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(images[str(number)], (width, height))
 
     def change(self, num):
+        """Change the block's number"""
         self.number = num
         if num == 0:
             im = images["2"].copy()
@@ -48,6 +48,7 @@ class Block(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(im, (self.width, self.height))
 
     def move(self, x, y):
+        """Moves the block to x,y"""
         if getBlock(x, y) != self:
             t = getBlock(x, y)
             t.change(self.number + t.number)
@@ -57,8 +58,8 @@ class Block(pygame.sprite.Sprite):
 
     def update(self, *args, **kwargs) -> None:
         # add what you want every block to do each tick here
-        
-        #checks if the block can move and moves it
+
+        # checks if the block can move and moves it
         if self.number != 0:
             if event.key == pygame.K_LEFT:
                 for x in range(self.x):
@@ -106,11 +107,14 @@ class Block(pygame.sprite.Sprite):
 
         return super().update(*args, **kwargs)
 
+
 def randomBlock():
-    x,y = random.randint(0,3),random.randint(0,3)
-    while getBlock(x,y).number != 0: 
-        x,y = random.randint(0,3),random.randint(0,3)
-    getBlock(x,y).change(2)
+    """Adds a random block to the game"""
+    x, y = random.randint(0, 3), random.randint(0, 3)
+    while getBlock(x, y).number != 0:
+        x, y = random.randint(0, 3), random.randint(0, 3)
+    getBlock(x, y).change(2)
+
 
 def createGrid() -> pygame.sprite.Group:
     """simply creates the Blocks to go on the grid and returns a group in a one-liner B)"""
@@ -145,7 +149,8 @@ blocks = createGrid()
 block = getBlock(0, 0)
 getBlock(3, 0).change(2)
 block.change(2)
-pos = [0, 0]
+blocks.draw(win)
+pygame.display.update()
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
