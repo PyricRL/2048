@@ -1,3 +1,4 @@
+from typing import Any
 import pygame, sys
 import Config
 
@@ -33,9 +34,6 @@ class Block(pygame.sprite.Sprite):
         else:
             self.image = pygame.transform.scale(images[str(number)], (width, height))
 
-    def draw(self):
-        win.blit(self.image, self.rect)
-
     def change(self, num):
         self.number = num
         if num == 0:
@@ -45,6 +43,18 @@ class Block(pygame.sprite.Sprite):
         else:
             im = images[str(num)].copy()
             self.image = pygame.transform.scale(im, (self.width, self.height))
+
+    def move(self, x, y):
+        if getBlock(x,y) != self:
+            t = getBlock(x, y)
+            t.change(self.number+t.number)
+            self.change(0)
+            return t
+        return self
+    def update(self, *args: Any, **kwargs: Any) -> None:
+        # add what you want every block to do each tick here
+
+        return super().update(*args, **kwargs)
 
 
 def createGrid() -> pygame.sprite.Group:
@@ -77,7 +87,10 @@ def getBlock(x, y) -> Block:
 
 
 blocks = createGrid()
-# getBlock(0,0).change(2)
+block = getBlock(0, 0)
+getBlock(3,3).change(2)
+block.change(2)
+pos = [0, 0]
 while True:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -85,12 +98,13 @@ while True:
             sys.exit()
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_LEFT:
-                pass
+                pos[0] = 0
             elif event.key == pygame.K_RIGHT:
-                pass
+                pos[0] = Config.gridwidth - 1
             elif event.key == pygame.K_UP:
-                pass
+                pos[1] = 0
             elif event.key == pygame.K_DOWN:
-                pass
+                pos[1] = Config.gridheight - 1
+            block=block.move(pos[0],pos[1])
         blocks.draw(win)  # draws the sprite group of blocks to the window
         pygame.display.update()
