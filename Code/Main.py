@@ -1,4 +1,4 @@
-from typing import Any
+import random
 import pygame, sys
 import Config
 
@@ -45,13 +45,14 @@ class Block(pygame.sprite.Sprite):
             self.image = pygame.transform.scale(im, (self.width, self.height))
 
     def move(self, x, y):
-        if getBlock(x,y) != self:
+        if getBlock(x, y) != self:
             t = getBlock(x, y)
-            t.change(self.number+t.number)
+            t.change(self.number + t.number)
             self.change(0)
             return t
         return self
-    def update(self, *args: Any, **kwargs: Any) -> None:
+
+    def update(self, *args, **kwargs) -> None:
         # add what you want every block to do each tick here
 
         return super().update(*args, **kwargs)
@@ -88,7 +89,7 @@ def getBlock(x, y) -> Block:
 
 blocks = createGrid()
 block = getBlock(0, 0)
-getBlock(3,3).change(2)
+getBlock(3, 3).change(2)
 block.change(2)
 pos = [0, 0]
 while True:
@@ -105,6 +106,7 @@ while True:
                 pos[1] = 0
             elif event.key == pygame.K_DOWN:
                 pos[1] = Config.gridheight - 1
-            block=block.move(pos[0],pos[1])
+                
+            block = block.move(pos[0], pos[1])
         blocks.draw(win)  # draws the sprite group of blocks to the window
         pygame.display.update()
