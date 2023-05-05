@@ -1,3 +1,4 @@
+from typing import Any
 import pygame, sys
 import Config
 
@@ -26,17 +27,12 @@ class Block(pygame.sprite.Sprite):
         self.score = score
         self.rect = pygame.rect.Rect(x, y, width, height)
         self.can_move = True
-        pygame.draw.rect(win, (255, 0, 0), self.rect)
         if number == 0:
             number = 0
             self.image = pygame.transform.scale(images["2"], (width, height))
             self.image.fill(Config.background)
         else:
             self.image = pygame.transform.scale(images[str(number)], (width, height))
-
-    def draw(self):
-        win.blit(self.image, self.rect)
-        self.movement()
 
     def change(self, num):
         self.number = num
@@ -47,34 +43,43 @@ class Block(pygame.sprite.Sprite):
         else:
             im = images[str(num)].copy()
             self.image = pygame.transform.scale(im, (self.width, self.height))
+
     def check_collision(self):
-        if self.rect.left <= 0:
+        if self.rect.left < 0:
             self.rect.left = 0
-        if self.rect.right >= Config.winwidth:
+        if self.rect.right > Config.winwidth:
             self.rect.right = Config.winwidth
-        if self.rect.bottom <= Config.winheight:
+        if self.rect.bottom > Config.winheight:
             self.rect.bottom = Config.winheight
-        if self.rect.top <= 0:
+        if self.rect.top < 0:
             self.rect.top = 0
+
     def movement(self):
-        keys = pygame.key.get_pressed()  
-        self.check_collision()      
-        if keys[pygame.K_w] and self.can_move == True:
-            self.rect.y += 150
-        if keys[pygame.K_d] and self.can_move == True:
-            self.rect.y -= 150
-        if keys[pygame.K_a] and self.can_move == True:
-            self.rect.x -= 150
-        if keys[pygame.K_d] and self.can_move == True:
-            self.rect.x += 150
-        
+        keys = pygame.key.get_pressed()
+        self.check_collision()
+        if keys[pygame.K_w] and self.can_move:
+            self.rect.y -= Config.blockheight + Config.borderwidth
+        elif keys[pygame.K_s] and self.can_move:
+            self.rect.y += Config.blockheight + Config.borderwidth
+        elif keys[pygame.K_a] and self.can_move:
+            self.rect.x -= Config.blockwidth + Config.borderwidth
+        elif keys[pygame.K_d] and self.can_move:
+            self.rect.x += Config.blockwidth + Config.borderwidth
+
+    def update(self, *args: Any, **kwargs: Any) -> None:
+        # add here what you want each block to do every tick
+        self.movement()
+
+        return super().update(*args, **kwargs)
+
+
 def createGrid() -> pygame.sprite.Group:
     """simply creates the Blocks to go on the grid and returns a group in a one-liner B)"""
     return pygame.sprite.Group(
         [
             [
                 Block(
-                    0,
+                    2,
                     Config.blockwidth,
                     Config.blockheight,
                     x * (Config.blockwidth + Config.borderwidth) + Config.borderwidth,
@@ -104,14 +109,7 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             sys.exit()
-        if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_LEFT:
-                pass
-            elif event.key == pygame.K_RIGHT:
-                pass
-            elif event.key == pygame.K_UP:
-                pass
-            elif event.key == pygame.K_DOWN:
-                pass
+        win.fill((Config.bordercolor))
+        blocks.update()
         blocks.draw(win)  # draws the sprite group of blocks to the window
         pygame.display.update()
